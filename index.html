@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Una escena animada de amor bajo un atardecer.">
+  <title>Atardecer de amor</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23ffd45a' d='M32 56S7 42 7 21C7 8 24 4 32 17 40 4 57 8 57 21c0 21-25 35-25 35Z'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: dark;
+      --gold: #ffd45a;
+      --gold-deep: #f3a71a;
+      --wine: #5c1d38;
+      --cream: #fff7dc;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      overflow: hidden;
+      font-family: Georgia, "Times New Roman", serif;
+      background: #281a32;
+    }
+
+    body {
+      min-height: 100svh;
+    }
+
+    .scene {
+      position: relative;
+      width: 100vw;
+      height: 100svh;
+      isolation: isolate;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(28, 12, 38, .03) 42%, rgba(21, 10, 22, .48) 100%),
+        url("atardecer-pareja.png") center center / cover no-repeat;
+    }
+
+    .scene::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 51% 51%, rgba(255, 213, 104, .23), transparent 24%),
+        linear-gradient(110deg, transparent 35%, rgba(255, 224, 142, .06) 48%, transparent 61%);
+      animation: breathe 5s ease-in-out infinite, lightSweep 12s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .tree-aura {
+      position: absolute;
+      z-index: 3;
+      top: -6vh;
+      right: -3vw;
+      width: min(47vw, 46rem);
+      aspect-ratio: 1;
+      border-radius: 48% 52% 46% 54%;
+      background: radial-gradient(circle, rgba(255, 209, 74, .16), rgba(255, 176, 32, .04) 47%, transparent 69%);
+      mix-blend-mode: screen;
+      filter: blur(9px);
+      animation: canopyGlow 4.2s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    .vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+      box-shadow: inset 0 0 12vw rgba(25, 8, 26, .35);
+    }
+
+    .intro {
+      position: absolute;
+      top: clamp(1.5rem, 5vw, 4.25rem);
+      left: clamp(1.25rem, 6vw, 6rem);
+      z-index: 8;
+      width: min(34rem, 82vw);
+      color: var(--cream);
+      text-shadow: 0 3px 24px rgba(50, 15, 26, .75);
+      animation: intro 1.8s ease both;
+    }
+
+    .eyebrow {
+      margin: 0 0 .65rem;
+      font: 600 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    h1 {
+      max-width: 11ch;
+      margin: 0;
+      font-size: clamp(2.4rem, 6vw, 6rem);
+      font-weight: 500;
+      line-height: .95;
+      letter-spacing: -.04em;
+      text-wrap: balance;
+    }
+
+    .hint {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      margin-top: 1rem;
+      padding: .62rem .9rem;
+      border: 1px solid rgba(255, 247, 220, .3);
+      border-radius: 999px;
+      background: rgba(62, 20, 42, .27);
+      backdrop-filter: blur(8px);
+      font: 500 .9rem/1.2 system-ui, sans-serif;
+      color: rgba(255, 247, 220, .92);
+    }
+
+    .hint span {
+      color: var(--gold);
+      animation: twinkle 1.7s ease-in-out infinite;
+    }
+
+    #petals {
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    .falling-love {
+      --x: 80vw;
+      --y: 20vh;
+      --drift-1: -35px;
+      --drift-2: 58px;
+      --drift-3: 18px;
+      --drop-1: 22vh;
+      --drop-2: 46vh;
+      --drop-3: 66vh;
+      --duration: 8s;
+      --delay: 0s;
+      position: absolute;
+      top: var(--y);
+      left: var(--x);
+      width: 2rem;
+      height: 2rem;
+      transform-origin: 50% -8px;
+      animation: detachAndFall var(--duration) var(--delay) cubic-bezier(.44, .05, .53, .95) forwards;
+      will-change: transform, opacity;
+    }
+
+    .flower {
+      display: grid;
+      width: 2rem;
+      height: 2rem;
+      place-items: center;
+      color: var(--gold);
+      filter: drop-shadow(0 2px 5px rgba(76, 34, 6, .45));
+      font-size: clamp(1.25rem, 2.1vw, 1.8rem);
+      line-height: 1;
+      animation: petalTurn 2.3s ease-in-out infinite, flowerFade var(--duration) var(--delay) linear forwards;
+    }
+
+    .falling-love::before {
+      content: "";
+      position: absolute;
+      top: -7px;
+      left: 13px;
+      width: 1px;
+      height: 9px;
+      transform: rotate(22deg);
+      transform-origin: bottom;
+      background: rgba(72, 85, 28, .85);
+      animation: stemBreak var(--duration) var(--delay) linear forwards;
+    }
+
+    .love-note {
+      position: absolute;
+      left: 50%;
+      bottom: 1rem;
+      width: max-content;
+      max-width: min(17rem, 68vw);
+      padding: .68rem 1rem;
+      transform: translate(-50%, 0) scale(.7);
+      border: 1px solid rgba(255, 224, 126, .55);
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(75, 24, 49, .9), rgba(128, 56, 55, .76));
+      box-shadow: 0 10px 30px rgba(36, 9, 23, .34), inset 0 1px rgba(255, 255, 255, .18);
+      backdrop-filter: blur(10px);
+      color: #fff8df;
+      font: 600 clamp(.82rem, 1.5vw, 1rem)/1.25 system-ui, sans-serif;
+      letter-spacing: .01em;
+      text-align: center;
+      opacity: 0;
+      animation: noteReveal var(--duration) var(--delay) ease forwards;
+    }
+
+    .love-note::before {
+      content: "♥";
+      margin-right: .42rem;
+      color: var(--gold);
+    }
+
+    .firefly {
+      --fx: 78vw;
+      --fy: 24vh;
+      --float-x: 20px;
+      --float-y: -18px;
+      --float-time: 5s;
+      position: absolute;
+      z-index: 5;
+      top: var(--fy);
+      left: var(--fx);
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #fff2a6;
+      box-shadow: 0 0 7px 2px rgba(255, 211, 74, .9), 0 0 18px 5px rgba(255, 167, 31, .38);
+      animation: fireflyFloat var(--float-time) ease-in-out infinite alternate, fireflyBlink 1.7s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .controls {
+      position: absolute;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 10;
+    }
+
+    .pause-button {
+      display: grid;
+      width: 2.8rem;
+      height: 2.8rem;
+      place-items: center;
+      border: 1px solid rgba(255, 247, 220, .38);
+      border-radius: 50%;
+      background: rgba(48, 16, 37, .42);
+      color: var(--cream);
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .pause-button:hover,
+    .pause-button:focus-visible {
+      transform: scale(1.08);
+      background: rgba(92, 29, 56, .72);
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+    }
+
+    .scene.paused *,
+    .scene.paused *::before {
+      animation-play-state: paused !important;
+    }
+
+    @keyframes intro {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes breathe {
+      50% { opacity: .55; transform: scale(1.08); }
+    }
+
+    @keyframes lightSweep {
+      0%, 100% { background-position: 0 0, -20vw 0; }
+      50% { background-position: 0 0, 35vw 0; }
+    }
+
+    @keyframes canopyGlow {
+      from { opacity: .48; transform: translate3d(0, 0, 0) scale(.96) rotate(-1deg); }
+      to { opacity: .9; transform: translate3d(-8px, 5px, 0) scale(1.045) rotate(1deg); }
+    }
+
+    @keyframes twinkle {
+      50% { transform: scale(1.28) rotate(8deg); filter: brightness(1.25); }
+    }
+
+    @keyframes petalTurn {
+      0%, 100% { transform: rotate(-12deg) scale(.94); }
+      50% { transform: rotate(34deg) scale(1.08); }
+    }
+
+    @keyframes detachAndFall {
+      0% { transform: translate3d(0, 0, 0) rotate(-5deg) scale(.72); opacity: 0; }
+      4% { opacity: 1; }
+      8% { transform: translate3d(-2px, 1px, 0) rotate(-9deg) scale(1); }
+      14% { transform: translate3d(4px, -2px, 0) rotate(8deg) scale(1); }
+      19% { transform: translate3d(-3px, 5px, 0) rotate(-15deg) scale(.98); }
+      40% { transform: translate3d(var(--drift-1), var(--drop-1), 0) rotate(118deg) scale(.94); opacity: 1; }
+      64% { transform: translate3d(var(--drift-2), var(--drop-2), 0) rotate(242deg) scale(.88); opacity: 1; }
+      83% { transform: translate3d(var(--drift-3), var(--drop-3), 0) rotate(336deg) scale(.82); opacity: 1; }
+      100% { transform: translate3d(var(--drift-3), var(--drop-3), 0) rotate(372deg) scale(.18); opacity: 0; }
+    }
+
+    @keyframes stemBreak {
+      0%, 14% { opacity: 1; transform: rotate(22deg) scaleY(1); }
+      18% { opacity: 1; transform: rotate(50deg) scaleY(.45); }
+      21%, 100% { opacity: 0; transform: rotate(72deg) scaleY(0); }
+    }
+
+    @keyframes flowerFade {
+      0%, 78% { opacity: 1; }
+      88%, 100% { opacity: 0; }
+    }
+
+    @keyframes noteReveal {
+      0%, 80% { opacity: 0; transform: translate(-50%, 14px) scale(.68); }
+      87%, 96% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -18px) scale(.94); }
+    }
+
+    @keyframes fireflyFloat {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(var(--float-x), var(--float-y), 0); }
+    }
+
+    @keyframes fireflyBlink {
+      0%, 100% { opacity: .16; }
+      45% { opacity: 1; }
+      70% { opacity: .42; }
+    }
+
+    @media (max-width: 700px) {
+      .scene {
+        background-position: 56% center;
+      }
+
+      .intro {
+        top: 1.25rem;
+        left: 1.15rem;
+      }
+
+      h1 {
+        font-size: clamp(2.2rem, 13vw, 4rem);
+      }
+
+      .hint {
+        font-size: .8rem;
+      }
+
+      .falling-love {
+        left: min(var(--x), 88vw);
+      }
+
+      .tree-aura {
+        top: 4vh;
+        right: -22vw;
+        width: 75vw;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .scene::before,
+      .hint span,
+      .flower,
+      .tree-aura,
+      .firefly { animation: none; }
+
+      .falling-love { display: none; }
+
+      .intro { animation-duration: .01ms; }
+
+      .reduced-note {
+        position: absolute;
+        right: 1rem;
+        bottom: 1rem;
+        z-index: 7;
+        max-width: 15rem;
+        padding: .75rem 1rem;
+        border: 1px solid rgba(255, 224, 126, .55);
+        border-radius: 999px;
+        background: rgba(75, 24, 49, .78);
+        color: var(--cream);
+        font: 600 .9rem/1.2 system-ui, sans-serif;
+      }
+
+      .controls { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="scene" id="scene" aria-label="Pareja abrazada en una banca mientras contempla un atardecer junto a un árbol con forma de corazón">
+    <section class="intro" aria-labelledby="title">
+      <p class="eyebrow">Un instante para recordar</p>
+      <h1 id="title">Donde florece el amor</h1>
+      <p class="hint"><span aria-hidden="true">✦</span> Las flores guardan pequeños mensajes</p>
+    </section>
+
+    <div class="tree-aura" aria-hidden="true"></div>
+    <div id="petals" aria-hidden="true"></div>
+    <div id="fireflies" aria-hidden="true"></div>
+    <p class="reduced-note">♥ Siempre contigo</p>
+    <div class="vignette"></div>
+
+    <div class="controls">
+      <button class="pause-button" id="pauseButton" type="button" aria-label="Pausar animación" aria-pressed="false">Ⅱ</button>
+    </div>
+  </main>
+
+  <script>
+    const scene = document.querySelector('#scene');
+    const petals = document.querySelector('#petals');
+    const fireflies = document.querySelector('#fireflies');
+    const pauseButton = document.querySelector('#pauseButton');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const messages = [
+      'Siempre contigo',
+      'Tú haces todo más bonito',
+      'Mi lugar favorito',
+      'Juntos es mejor',
+      'Un amor que florece',
+      'Cada momento cuenta',
+      'Eres mi casualidad favorita',
+      'Que nunca falten sonrisas'
+    ];
+
+    function createFlower(index = 0) {
+      if (reduceMotion || scene.classList.contains('paused')) return;
+
+      const item = document.createElement('div');
+      const x = 63 + Math.random() * 30;
+      const y = 5 + Math.random() * 36;
+      const drop = 84 - y + Math.random() * 7;
+      const drift1 = -50 + Math.random() * 88;
+      const drift2 = -72 + Math.random() * 155;
+      const drift3 = -55 + Math.random() * 115;
+      const duration = 7.5 + Math.random() * 2.8;
+      const message = messages[index % messages.length];
+
+      item.className = 'falling-love';
+      item.style.setProperty('--x', `${x}vw`);
+      item.style.setProperty('--y', `${y}vh`);
+      item.style.setProperty('--drift-1', `${drift1}px`);
+      item.style.setProperty('--drift-2', `${drift2}px`);
+      item.style.setProperty('--drift-3', `${drift3}px`);
+      item.style.setProperty('--drop-1', `${drop * .3}vh`);
+      item.style.setProperty('--drop-2', `${drop * .64}vh`);
+      item.style.setProperty('--drop-3', `${drop}vh`);
+      item.style.setProperty('--duration', `${duration}s`);
+      item.innerHTML = `<span class="flower">✿</span><span class="love-note">${message}</span>`;
+
+      petals.appendChild(item);
+      window.setTimeout(() => item.remove(), (duration + .5) * 1000);
+    }
+
+    function createFireflies() {
+      if (reduceMotion) return;
+
+      for (let i = 0; i < 15; i += 1) {
+        const light = document.createElement('span');
+        light.className = 'firefly';
+        light.style.setProperty('--fx', `${60 + Math.random() * 37}vw`);
+        light.style.setProperty('--fy', `${7 + Math.random() * 48}vh`);
+        light.style.setProperty('--float-x', `${-25 + Math.random() * 50}px`);
+        light.style.setProperty('--float-y', `${-25 + Math.random() * 50}px`);
+        light.style.setProperty('--float-time', `${3.5 + Math.random() * 4}s`);
+        light.style.animationDelay = `${Math.random() * -5}s`;
+        fireflies.appendChild(light);
+      }
+    }
+
+    createFireflies();
+
+    let flowerIndex = 0;
+    const firstWave = [0, 650, 1400, 2250];
+    firstWave.forEach(delay => {
+      window.setTimeout(() => createFlower(flowerIndex++), delay);
+    });
+
+    const flowerTimer = window.setInterval(() => {
+      createFlower(flowerIndex++);
+    }, 1350);
+
+    pauseButton.addEventListener('click', () => {
+      const paused = scene.classList.toggle('paused');
+      pauseButton.textContent = paused ? '▶' : 'Ⅱ';
+      pauseButton.setAttribute('aria-label', paused ? 'Reanudar animación' : 'Pausar animación');
+      pauseButton.setAttribute('aria-pressed', String(paused));
+    });
+
+    window.addEventListener('beforeunload', () => clearInterval(flowerTimer));
+  </script>
+</body>
+</html>
